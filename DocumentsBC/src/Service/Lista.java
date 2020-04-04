@@ -22,12 +22,12 @@ public class Lista
 		String hash;
 		
 		String hashprev;
+		
+		String fecha;
 
 		Nodo sig;
 
 	}
-
- 
 
 	private Nodo ap;
 
@@ -70,6 +70,8 @@ public class Lista
 
 			aux.hash =  hs.Hash( bloque + dir1 + dir2 + documento + time + aux.hashprev);
 			
+			aux.fecha = time.toString();
+			
 			ap = aux;
 
  
@@ -78,11 +80,16 @@ public class Lista
 
 			nuevo = ap;
 
-			while(nuevo.sig!=null) {
-
+			while(nuevo.sig!=null) 
+			{
+				time = new Timestamp(System.currentTimeMillis());
+				aux.hashprev = hs.Hash( bloque + dir1 + dir2 + documento + time);
+				aux.hash = hs.Hash( bloque + dir1 + dir2 + documento + time + aux.hashprev);
 				nuevo = nuevo.sig;
 
 			}
+			
+			time = new Timestamp(System.currentTimeMillis());
 			
 			aux.hashprev = nuevo.hash;
 
@@ -115,7 +122,7 @@ public class Lista
 			
 			if (n.bloque.contains(idBloque)) {
                 
-				System.out.println("\n Bloque: "+"["+n.bloque+"]"+" - "+"["+"Origen: "+n.dir1+"]"+" - "+"["+"Destino: "+n.dir2+"]"+" - "+"["+"[Documento: "+n.document+"]"+" - "+"["+"hash: "+n.hash +"]");
+				System.out.println("\n Bloque: "+"["+n.bloque+"]"+" - "+"["+"Origen: "+n.dir1+"]"+" - "+"["+"Destino: "+n.dir2+"]"+" - "+"["+"[Documento: "+n.document+"]"+" - "+"["+"hash: "+n.hash +"]" +"\n["+"Fecha: "+n.fecha +"]" );
 			}
 			
 			n = n.sig;
@@ -123,7 +130,7 @@ public class Lista
 		
 		if (n.bloque.contains(idBloque)) {
             
-			System.out.println("\n Bloque: "+"["+n.bloque+"]"+" - "+"["+"Origen: "+n.dir1+"]"+" - "+"["+"Destino: "+n.dir2+"]"+" - "+"["+"[Documento: "+n.document+"]"+" - "+"["+"hash: "+n.hash +"]");
+			System.out.println("\n Bloque: "+"["+n.bloque+"]"+" - "+"["+"Origen: "+n.dir1+"]"+" - "+"["+"Destino: "+n.dir2+"]"+" - "+"["+"[Documento: "+n.document+"]"+" - "+"["+"hash: "+n.hash +"]" +"\n["+"Fecha: "+n.fecha +"]");
 		}
 		
 	}
@@ -138,7 +145,9 @@ public class Lista
 
 	    while(aux!=null) {
 
-	    	System.out.println("\n Bloque: "+"["+aux.bloque+"]"+" - "+"["+"Origen: "+aux.dir1+"]"+" - "+"["+"Destino: "+aux.dir2+"]"+" - "+"["+"[Documento: "+aux.document+ "]");
+	    	System.out.println("\n Bloque: "+"["+aux.bloque+"]"+"\n\n["+"Origen: "+aux.dir1+"]"
+	    	+" - "+"["+"Destino: "+aux.dir2+"]"+" - "+"["+"[Documento: "+aux.document+ "]" +"\n["+"Fecha: "+aux.fecha +"]");
+	    	
 	    	System.out.println("\n\n["+"Hash Prev: "+aux.hashprev +"]" + "\n\n["+"Hash: "+aux.hash +"]");
 	    	System.out.println("------------------------------");
 	    	aux=aux.sig;
@@ -210,19 +219,17 @@ public class Lista
 					
 					documento = ingreso.next();
 					
-					System.out.println(arch.leer(documento));
-					
 					documento=arch.leer(documento);
+					
+					System.out.println("Contenido del documento : " );
+					
+					System.out.println(documento);
 					
 					id= (int) (Math.random()*25+1);
 					
-					System.out.println(id);
-					
 					bloque = Integer.toString(id);
 					
-					System.out.println(bloque);
-					
-					System.out.print("Numero de bloque: "  + bloque);
+					System.out.print("\n\nNumero de bloque: "  + bloque);
 
 					lista1.insertar(bloque, dir1, dir2, documento);
 
