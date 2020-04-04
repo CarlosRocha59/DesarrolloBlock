@@ -1,5 +1,7 @@
 package Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Scanner;
 
@@ -75,8 +77,6 @@ public class Lista
 		}else {
 
 			nuevo = ap;
-			
-			System.out.println(nuevo.hashprev);
 
 			while(nuevo.sig!=null) {
 
@@ -109,46 +109,38 @@ public class Lista
  
 	public void Buscar_Id(String idBloque) {
 
-		Nodo recorrer=ap;
-
-		boolean encontrado=false;
-
-		while (recorrer!=null && encontrado==false) {
-
-			if (recorrer.bloque==idBloque) {
-
-				encontrado=true;
-
+		Nodo n = ap;
+		
+		while(n.bloque!=null && n.sig!=null) {
+			
+			if (n.bloque.contains(idBloque)) {
+                
+				System.out.println("\n Bloque: "+"["+n.bloque+"]"+" - "+"["+"Origen: "+n.dir1+"]"+" - "+"["+"Destino: "+n.dir2+"]"+" - "+"["+"[Documento: "+n.document+"]"+" - "+"["+"hash: "+n.hash +"]");
 			}
-
+			
+			n = n.sig;
 		}
-
-		if (encontrado==true) {
-
-			System.out.println("\n Bloque: "+"["+recorrer.bloque+"]"+" - "+"["+"Origen: "+recorrer.dir1+"]"+" - "+"["+"Destino: "+recorrer.dir2+"]"+" - "+"["+"[Documento: "+recorrer.document+"]"+" - "+"["+"hash: "+recorrer.hash +"]");
-
-		}else {
-
-			System.out.println("no hay nada ");
-
+		
+		if (n.bloque.contains(idBloque)) {
+            
+			System.out.println("\n Bloque: "+"["+n.bloque+"]"+" - "+"["+"Origen: "+n.dir1+"]"+" - "+"["+"Destino: "+n.dir2+"]"+" - "+"["+"[Documento: "+n.document+"]"+" - "+"["+"hash: "+n.hash +"]");
 		}
-
+		
 	}
 
 	public void imprimir() {
 
 		Nodo aux = ap;
 
-		System.out.println("--------------------");
-
 	    System.out.println("\n Listado de transacciones.");
 
-	    System.out.println("--------------------");
+	    System.out.println("------------------------------");
 
 	    while(aux!=null) {
 
 	    	System.out.println("\n Bloque: "+"["+aux.bloque+"]"+" - "+"["+"Origen: "+aux.dir1+"]"+" - "+"["+"Destino: "+aux.dir2+"]"+" - "+"["+"[Documento: "+aux.document+ "]");
-	    	System.out.println("["+"Hash Prev: "+aux.hashprev +"]" + "\n["+"Hash: "+aux.hash +"]");
+	    	System.out.println("\n\n["+"Hash Prev: "+aux.hashprev +"]" + "\n\n["+"Hash: "+aux.hash +"]");
+	    	System.out.println("------------------------------");
 	    	aux=aux.sig;
 	    }
 
@@ -162,6 +154,8 @@ public class Lista
 
 		Lista lista1 = new Lista();
 
+		Archivos arch=new Archivos();
+		
 		int opc=0;
 
 		System.out.println("---- Benvenido al demo de block chain ------");
@@ -181,6 +175,7 @@ public class Lista
 
 			String bloque;
 			
+			int id;
 
 			System.out.println("         __________________");
 
@@ -201,26 +196,43 @@ public class Lista
 			switch(opc) {
 
 			case 1:
+                
+				try {
+					System.out.print("Origen : ");
+	
+					dir1 = ingreso.next();
+	
+					System.out.print("Destino: ");
+	
+					dir2 = ingreso.next();
+	
+					System.out.print("Ruta del documento:  ");
+					
+					documento = ingreso.next();
+					
+					System.out.println(arch.leer(documento));
+					
+					documento=arch.leer(documento);
+					
+					id= (int) Math.random();
+					
+					System.out.println(id);
+					
+					bloque = Integer.toString(id);
+					
+					System.out.println(bloque);
+					
+					System.out.print("Numero de bloque: "  + bloque);
 
-				System.out.print("Origen : ");
+					lista1.insertar(bloque, dir1, dir2, documento);
 
-				dir1 = ingreso.next();
-
-				System.out.print("Destino: ");
-
-				dir2 = ingreso.next();
-
-				System.out.print("Documento:  ");
-
-				documento = ingreso.next();
+					lista1.imprimir();
 				
-				System.out.print("Numero de bloque: " );
-				
-				bloque = ingreso.next();
-
-				lista1.insertar(bloque, dir1, dir2, documento);
-
-				lista1.imprimir();
+			    } catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 
 			break;
 			
