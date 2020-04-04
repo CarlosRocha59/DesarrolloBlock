@@ -214,7 +214,7 @@ public class Lista
 					
 					documento=arch.leer(documento);
 					
-					id= (int) Math.random();
+					id= (int) (Math.random()*25+1);
 					
 					System.out.println(id);
 					
